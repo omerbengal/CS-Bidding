@@ -16,7 +16,7 @@ class Course:
     name: str
     allowedDegrees: List[str]
     type: str  # theoretical or practical
-    language: str  # Hebrew or English
+    languages: List[str]  # Hebrew or English
     capacities: Dict[str, int]  # {degree: capacity} where degree is '1st', '2nd', 'advanced' # nopep8
 
 
@@ -62,10 +62,10 @@ def createStudents():
 
 def createCourses():
     courses = [
-        Course(code=1, name='course1', allowedDegrees=['1st', '2nd', 'advanced'], type='theoretical', language='Hebrew', capacities={'1st': 2, '2nd': 2, 'advanced': 2}),  # nopep8
-        Course(code=2, name='course2', allowedDegrees=['1st', '2nd'], type='practical', language='English', capacities={'1st': 2, '2nd': 2}),  # nopep8
-        Course(code=3, name='course3', allowedDegrees=['1st'], type='theoretical', language='English', capacities={'1st': 2}),  # nopep8
-        Course(code=4, name='course4', allowedDegrees=['2nd'], type='theoretical', language='Hebrew', capacities={'2nd': 2}),  # nopep8
+        Course(code=1, name='course1', allowedDegrees=['1st', '2nd', 'advanced'], type='theoretical', languages=['Hebrew'], capacities={'1st': 2, '2nd': 2, 'advanced': 2}),  # nopep8
+        Course(code=2, name='course2', allowedDegrees=['1st', '2nd'], type='practical', languages=['English'], capacities={'1st': 2, '2nd': 2}),  # nopep8
+        Course(code=3, name='course3', allowedDegrees=['1st'], type='theoretical', languages=['English'], capacities={'1st': 2}),  # nopep8
+        Course(code=4, name='course4', allowedDegrees=['2nd'], type='theoretical', languages=['Hebrew'], capacities={'2nd': 2}),  # nopep8
     ]
     return courses
 
