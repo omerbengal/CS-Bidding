@@ -1,6 +1,6 @@
 import random
-from dataclasses import dataclass
-from typing import List, Dict
+from dataclasses import dataclass, field
+from typing import List, Dict, Tuple
 
 
 """
@@ -35,13 +35,8 @@ class Student:
     language: str
     preferences_courses_codes: List[int]  # list of courses codes - the student's preferences - ordered by priority # nopep8
     desired_courses_number: int  # number of courses the student wants to enroll in
-    enrolled_courses: List[int] = None
-    constraints: List[Constraint] = None
-
-    # Initialize the student's enrolled courses and constraints
-    def __post_init__(self):
-        self.enrolled_courses = []
-        self.constraints = []
+    enrolled_courses: List[int] = field(default_factory=list)
+    constraints: List[Constraint] = field(default_factory=list)
 
 
 def createStudents():
@@ -70,7 +65,7 @@ def createCourses():
     return courses
 
 
-def bidding_course_match(students, courses):
+def bidding_course_match(students: List[Student], courses: List[Course]) -> Tuple[List[Student], Dict[int, Course]]:
     """
     1. Draw a random order of the students. Let's denote by L the list of students in the random order.
     2. Go over L, enroll every student i to the first course in his preferences list that still has capacity. Make sure to mark the course as full once the student is enrolled. Also make sure to mark out the course from the student's preferences list.
@@ -89,22 +84,47 @@ def bidding_course_match(students, courses):
             got_enrolled = False
 
             for preferred_course_code in list(student.preferences_courses_codes):
+
+                # check if there exists a constraint that contains the preferred course and that the number in this constraint is 0 # nopep8
+                constraint_with_course_and_number_is_zero_exists = False
+                for constraint in student.constraints:
+                    if preferred_course_code in constraint.courses and constraint.number == 0:
+                        constraint_with_course_and_number_is_zero_exists = True
+                        break
+
+                # if the student has a constraint that contains the preferred course and the number in this constraint is 0, he can't be enrolled in this course # nopep8
+                if constraint_with_course_and_number_is_zero_exists:
+                    student.preferences_courses_codes.remove(preferred_course_code)  # nopep8
+                    continue
+
                 if courses_dict[preferred_course_code].capacities.get(student.degree, 0) > 0:
+                    # decrease the capacity of the course by 1
                     courses_dict[preferred_course_code].capacities[student.degree] -= 1
+                    # decrease the number in the constraints that contains the preferred course # nopep8
+                    for constraint in student.constraints:
+                        if preferred_course_code in constraint.courses:
+                            constraint.number -= 1
+                    # enroll the student in the course
                     student.enrolled_courses.append(preferred_course_code)
+                    # remove the course from the student's preferences list
                     student.preferences_courses_codes.remove(preferred_course_code)  # nopep8
                     got_enrolled = True
                     break
 
+            # if the student needs to be enrolled in more courses and he has more courses to enroll in # nopep8
             if len(student.enrolled_courses) < student.desired_courses_number and student.preferences_courses_codes:
+                # if the student got enrolled in a course, add him to the next round
                 if got_enrolled:
                     next_round_students.append(student)
+                # if the student didn't get enrolled in any course, add him to the next round
                 else:
                     print(f"Student {student.id} couldn't be enrolled in any more courses.")  # nopep8
 
+        # if L is the same as next_round_students, break the loop (because nothing changed)
         if next_round_students == L:
             break
 
+        # put in L the reversed next_round_students
         L = list(reversed(next_round_students))
 
     return students, courses_dict
