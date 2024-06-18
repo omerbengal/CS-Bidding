@@ -4,9 +4,26 @@ from typing import List, Dict, Tuple
 
 
 """
+- Course should have only one language (same course different language = new course)
 
-What is the difference between courses' allowedDegrees "advanced" or "2nd" and courses' capacities "MLDS"?
+- new method that adds a forced constraints to all students for
+    1. courses that appear twice because of different languages
+    2. courses that by default could not be enrolled in if you took other courses
 
+- new course field - English capacity (only for courses with language "English")
+- change course's language to str with the values "Hebrew" or "English"
+    * if student is Hebrew and enrolled in English course - subtract 1 from general "1st" capacity
+    * if student is English and enrolled in Hebrew course - subtract 1 from general "1st" capacity AND from English capacity
+
+- new DegreeType: "MLDS" - they should be able to enroll in courses with degreeType "2nd" (as well as "MLDS" of course)
+
+- 2nd round for hebrew students who got rejected in the first round for English courses (due to english capacity being more than the actual english students who enrolled)
+
+- change course's "allowedDegrees" to int with the values (1 - 1st, 2 - 2nd, 3 - advanced [1st and 2nd])
+    * if student is 1st - show him 1 and 3
+    * if student is 2nd - show him 2 and 3
+
+-----
 """
 
 
