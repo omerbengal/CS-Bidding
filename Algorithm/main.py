@@ -4,6 +4,14 @@ from typing import List, Dict, Tuple
 from abc import ABC
 
 
+HEBREW_LANGUAGE_CODE = 1
+ENGLISH_LANGUAGE_CODE = 2
+
+FIRST_DEGREE_CODE = 1
+SECOND_DEGREE_CODE = 2
+ADVANCED_DEGREE_CODE = 3
+
+
 """
 ✅ - Course should have only one language (same course different language = new course)
 
@@ -15,9 +23,11 @@ from abc import ABC
 
 ✅ - new course field - English capacity (only for courses with language "English")
 ✅ - change course's language to str with the values "Hebrew" or "English"
+    ✅
     ! check hebrew students trying to enroll in English courses and vice versa:
     TODO: if student is Hebrew and enrolled in English course - subtract 1 from general "1st" capacity
     TODO: if student is English and enrolled in Hebrew course - subtract 1 from general "1st" capacity AND from English capacity
+    ✅
 
 - new DegreeType: "MLDS" - they should be able to enroll in courses with degreeType "2nd" (as well as "MLDS" of course)
 
@@ -47,12 +57,12 @@ class Course(ABC):
 
 @dataclass
 class HebrewCourse(Course):
-    pass
+    englishCapacity: int  # capacity saved for English students
 
 
 @dataclass
 class EnglishCourse(Course):
-    englishCapacity: int  # capacity saved for English students
+    pass
 
 
 @dataclass
@@ -67,7 +77,7 @@ class Student:
     name: str
     email: str
     degree: int  # 1 - 1st, 2 - 2nd, 3 - MLDS
-    language: str
+    language: int  # 1 - Hebrew, 2 - English
     preferences_courses_codes: List[int]  # list of courses codes - the student's preferences - ordered by priority # nopep8
     desired_courses_number: int  # number of courses the student wants to enroll in
     enrolled_courses: List[int] = field(default_factory=list)
@@ -76,16 +86,16 @@ class Student:
 
 def createStudents():
     students = [
-        Student(id=1, name='student1', email='student1@post.runi.ac.il', degree=1, language='Hebrew', preferences_courses_codes=[1, 2, 3, 4], desired_courses_number=2),  # nopep8
-        Student(id=2, name='student2', email='student2@post.runi.ac.il', degree=2, language='English', preferences_courses_codes=[4, 3, 2, 1], desired_courses_number=3),  # nopep8
-        Student(id=3, name='student3', email='student3@post.runi.ac.il', degree=3, language='Hebrew', preferences_courses_codes=[1, 2, 3, 4], desired_courses_number=1),  # nopep8
-        Student(id=4, name='student4', email='student4@post.runi.ac.il', degree=1, language='English', preferences_courses_codes=[1, 3, 4, 2], desired_courses_number=2),  # nopep8
-        Student(id=5, name='student5', email='student5@post.runi.ac.il', degree=3, language='English', preferences_courses_codes=[1, 2, 3, 4], desired_courses_number=1),  # nopep8
-        Student(id=6, name='student6', email='student6@post.runi.ac.il', degree=2, language='Hebrew', preferences_courses_codes=[3, 2], desired_courses_number=1),  # nopep8
-        Student(id=7, name='student7', email='student7@post.runi.ac.il', degree=1, language='English', preferences_courses_codes=[3, 1, 4, 2], desired_courses_number=2),  # nopep8
-        Student(id=8, name='student8', email='student8@post.runi.ac.il', degree=3, language='Hebrew', preferences_courses_codes=[2, 1, 3, 4], desired_courses_number=1),  # nopep8
-        Student(id=9, name='student9', email='student9@post.runi.ac.il', degree=2, language='English', preferences_courses_codes=[2, 4, 1, 3], desired_courses_number=2),  # nopep8
-        Student(id=10, name='student10', email='student10@post.runi.ac.il', degree=3, language='English', preferences_courses_codes=[1, 2, 3, 4], desired_courses_number=1),  # nopep8
+        Student(id=1, name='student1', email='student1@post.runi.ac.il', degree=FIRST_DEGREE_CODE, language=HEBREW_LANGUAGE_CODE, preferences_courses_codes=[1, 2, 3, 4], desired_courses_number=2),  # nopep8
+        Student(id=2, name='student2', email='student2@post.runi.ac.il', degree=SECOND_DEGREE_CODE, language=ENGLISH_LANGUAGE_CODE, preferences_courses_codes=[4, 3, 2, 1], desired_courses_number=3),  # nopep8
+        Student(id=3, name='student3', email='student3@post.runi.ac.il', degree=ADVANCED_DEGREE_CODE, language=HEBREW_LANGUAGE_CODE, preferences_courses_codes=[1, 2, 3, 4], desired_courses_number=1),  # nopep8
+        Student(id=4, name='student4', email='student4@post.runi.ac.il', degree=FIRST_DEGREE_CODE, language=ENGLISH_LANGUAGE_CODE, preferences_courses_codes=[1, 3, 4, 2], desired_courses_number=2),  # nopep8
+        Student(id=5, name='student5', email='student5@post.runi.ac.il', degree=ADVANCED_DEGREE_CODE, language=ENGLISH_LANGUAGE_CODE, preferences_courses_codes=[1, 2, 3, 4], desired_courses_number=1),  # nopep8
+        Student(id=6, name='student6', email='student6@post.runi.ac.il', degree=SECOND_DEGREE_CODE, language=HEBREW_LANGUAGE_CODE, preferences_courses_codes=[3, 2], desired_courses_number=1),  # nopep8
+        Student(id=7, name='student7', email='student7@post.runi.ac.il', degree=FIRST_DEGREE_CODE, language=ENGLISH_LANGUAGE_CODE, preferences_courses_codes=[3, 1, 4, 2], desired_courses_number=2),  # nopep8
+        Student(id=8, name='student8', email='student8@post.runi.ac.il', degree=ADVANCED_DEGREE_CODE, language=HEBREW_LANGUAGE_CODE, preferences_courses_codes=[2, 1, 3, 4], desired_courses_number=1),  # nopep8
+        Student(id=9, name='student9', email='student9@post.runi.ac.il', degree=SECOND_DEGREE_CODE, language=ENGLISH_LANGUAGE_CODE, preferences_courses_codes=[2, 4, 1, 3], desired_courses_number=2),  # nopep8
+        Student(id=10, name='student10', email='student10@post.runi.ac.il', degree=ADVANCED_DEGREE_CODE, language=ENGLISH_LANGUAGE_CODE, preferences_courses_codes=[1, 2, 3, 4], desired_courses_number=1),  # nopep8
     ]
     return students
 
@@ -134,14 +144,12 @@ def bidding_course_match(students: List[Student], courses: List[Course]) -> Tupl
             for preferred_course_code in list(student.preferences_courses_codes):
                 print("course", preferred_course_code)
 
-                # TODO: MAYBE THIS NEEDS TO BE REMOVED (because "we do not mess with the students decisions")
-                # check if the student's degree is allowed to enroll in the course
+                # Make sure the student's degree is allowed to enroll in the course
                 if courses_dict[preferred_course_code].allowedDegree != student.degree:
                     student.preferences_courses_codes.remove(preferred_course_code)  # nopep8
                     continue
-                # TODO: MAYBE THIS NEEDS TO BE REMOVED (because "we do not mess with the students decisions")
 
-                # check if there exists a constraint that contains the preferred course and that the number in this constraint is 0 # nopep8
+                # Check if there exists a constraint that contains the preferred course and that the number in this constraint is 0 # nopep8
                 constraint_with_course_and_number_is_zero_exists = False
                 for constraint in student.constraints:
                     if preferred_course_code in constraint.courses_codes and constraint.counter == 0:
@@ -157,6 +165,9 @@ def bidding_course_match(students: List[Student], courses: List[Course]) -> Tupl
                 if courses_dict[preferred_course_code].capacity > 0:
                     # decrease the capacity of the course by 1
                     courses_dict[preferred_course_code].capacity -= 1
+                    # decrease the English capacity of the Hebrew course by 1 if the student is an English student
+                    if courses_dict[preferred_course_code] is HebrewCourse and student.language == ENGLISH_LANGUAGE_CODE:
+                        courses_dict[preferred_course_code].englishCapacity -= 1
                     # decrease the number in the constraints that contains the preferred course # nopep8
                     for constraint in student.constraints:
                         if preferred_course_code in constraint.courses_codes:
