@@ -90,8 +90,12 @@ def createStudents():
     return students
 
 
-def auto_constraint(students: List[Student], course1: Course, course2: Course):
-    constraint = Constraint(courses_codes=[course1.code, course2.code], counter=1)  # nopep8
+def auto_constraint(students: List[Student], courses: List[Course]):
+    """
+    Method that adds a forced constraint to all students.
+    The constraint is that they can only enroll in one course from the list of courses.
+    """
+    constraint = Constraint(courses_codes=[course.code for course in courses], counter=1)  # nopep8
     for student in students:
         student.constraints.append(constraint)
 
