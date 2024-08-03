@@ -3,6 +3,7 @@ from dataclasses import dataclass, field
 from typing import List, Dict, Tuple
 from abc import ABC
 
+
 # Language codes
 HEBREW_LANGUAGE_CODE = 1
 ENGLISH_LANGUAGE_CODE = 2
@@ -39,7 +40,6 @@ ADVANCED_DEGREE_CODE = 3
     * if student is 1st - show him 1 and 3
     * if student is 2nd - show him 2 and 3
 
------
 """
 
 
@@ -159,6 +159,7 @@ def bidding_course_match(students: List[Student], courses: List[Course]) -> Tupl
                 if courses_dict[preferred_course_code].allowedDegree != student.degree:
                     # If the student is 2nd MLDS and the course is 2nd, DO NOT remove the course from the student's preferences list
                     if not (courses_dict[preferred_course_code].allowedDegree == SECOND_DEGREE_CODE and student.degree == SECOND_DEGREE_MLDS_CODE):
+                        # The course's allowed degree is not the student's degree, and we are not in the 2nd MLDS case
                         student.preferences_courses_codes.remove(preferred_course_code)  # nopep8
                         continue
 
@@ -177,7 +178,7 @@ def bidding_course_match(students: List[Student], courses: List[Course]) -> Tupl
                 # Check if the course has capacity
                 if courses_dict[preferred_course_code].capacity > 0:
 
-                    """HORRAY - the student can be enrolled in the course!"""
+                    """🥳HORRAY - the student can be enrolled in the course!🥳"""
 
                     # Decrease the general capacity of the course by 1
                     courses_dict[preferred_course_code].capacity -= 1
